@@ -12,6 +12,9 @@ node_modules
 .env.test.local
 .env.production.local
 
+# sentry env files
+.env.sentry-build-plugin
+
 # Testing
 coverage
 
@@ -34,3 +37,19 @@ npm-debug.log*
 # Misc
 .DS_Store
 *.pem
+# --- 自动生成文件屏蔽 ---
+
+# 屏蔽所有 .js 文件（如果它们是 .ts/.tsx 的产物）
+# 请谨慎使用，确保不会屏蔽需要提交的 JS 文件
+*.js
+*.jsx
+
+# 屏蔽 TypeScript 编译产物
+*.d.ts
+*.d.ts.map
+
+# 屏蔽特定的 providers 编译产物
+# 假设 providers.tsx 在 widget/components/providers.tsx
+widget/components/providers.js
+widget/components/providers.d.ts
+widget/components/providers.d.ts.map
