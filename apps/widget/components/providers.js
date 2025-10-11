@@ -1,8 +1,19 @@
 "use client";
-import * as React from "react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+
+import React from "react";
+import { ConvexReactClient } from "convex/react";
+import { ConvexProvider } from "convex/react";
+
+if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
+  throw new Error("Missing NEXT_PUBLIC_CONVEX_URL in your .env file");
+}
+
+const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL || "");
+
 export function Providers({ children }) {
-    return (<NextThemesProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange enableColorScheme>
+  return (
+    <ConvexProvider client={convex}>
       {children}
-    </NextThemesProvider>);
+    </ConvexProvider>
+  );
 }
