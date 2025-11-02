@@ -35,7 +35,7 @@ const customerSupportItems = [
   {
     title: 'Conversations',
     icon: InboxIcon,
-    url: 'conversations',
+    url: '/conversations',
   },
   {
     title: 'Knowledge Base',
