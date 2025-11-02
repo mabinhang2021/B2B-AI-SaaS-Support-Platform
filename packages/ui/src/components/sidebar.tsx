@@ -5,7 +5,24 @@ import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { PanelLeftIcon } from "lucide-react"
 
-import { useIsMobile } from "@/hooks/use-mobile"
+// Local implementation of useIsMobile to avoid import issues
+const MOBILE_BREAKPOINT = 768
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
+
+  React.useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
+    const onChange = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    }
+    mql.addEventListener("change", onChange)
+    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    return () => mql.removeEventListener("change", onChange)
+  }, [])
+
+  return !!isMobile
+}
 import { cn } from "@workspace/ui/lib/utils"
 import { Button } from "@workspace/ui/components/button"
 import { Input } from "@workspace/ui/components/input"
@@ -25,7 +42,7 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip"
 
-const SIDEBAR_COOKIE_NAME = "sidebar_state"
+export const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
@@ -487,10 +504,15 @@ const sidebarMenuButtonVariants = cva(
         sm: "h-7 text-xs",
         lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!",
       },
+      isActive: {
+        true: "bg-gradient-to-b from-sidebar-primary to-[#0b63f3] text-sidebar-primary-foreground hover:to-[#0b63f3]/90",
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      isActive: false,
     },
   }
 )
@@ -517,7 +539,7 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
-      className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+      className={cn(sidebarMenuButtonVariants({ variant, size, isActive }), className)}
       {...props}
     />
   )
@@ -724,3 +746,4 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+
