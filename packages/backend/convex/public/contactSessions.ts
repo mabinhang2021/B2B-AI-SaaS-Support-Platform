@@ -9,7 +9,7 @@ export const create = mutation({
     organizationId: v.string(),
     name: v.string(),
     email: v.string(),
-    expiresAt: v.number(),
+    expiresAt: v.optional(v.number()),
     metadata: v.optional(v.object({
       userAgent: v.optional(v.string()),
       language: v.optional(v.string()),
@@ -40,4 +40,19 @@ export const create = mutation({
     return contactSessionId;
 },
 });
- 
+
+export const validate = mutation({
+  args: {
+    contactSessionId: v.id('contactSessions'),
+  },
+  handler: async (ctx,args) => {
+    const contactSession = await ctx.db.get(args.contactSessionId);
+    if (!contactSession) {
+      return { valid: false,reason: 'Contact session not found' };
+    }
+    if (contactSession.expiresAt < Date.now()) {
+      return { valid: false,reason: 'Contact session expired' };
+    }
+    return { valid: true,contactSession };
+  }
+});

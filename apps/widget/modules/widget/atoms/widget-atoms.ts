@@ -1,9 +1,17 @@
-import {atom} from "jotai";
-import { WidgetScreen } from "../types";
-
+import { atom } from 'jotai';
+import { WidgetScreen } from '../types';
+import { atomFamily, atomWithStorage } from 'jotai/utils';
+import { Id } from '@workspace/backend/_generated/dataModel';
 
 //basic widget state atoms
 
-export const screenAtom = atom<WidgetScreen>('auth'); // possible values: 'auth', 'selection', 'details', etc.
+export const screenAtom = atom<WidgetScreen>('loading');
+export const organizationIdAtom = atom<string | null>(null);
 
-
+//organization-scoped contact session atom
+export const contactSessionIdAtomFamily = atomFamily((organizationId: string) =>
+  atomWithStorage<Id<"contactSessions"> | null>('${CONTACT_SESSION_KEY}_${organizationId}', null),
+);
+ 
+export const errorMessageAtom = atom<string | null>(null);
+export const loadingMessageAtom = atom<string | null>(null);
