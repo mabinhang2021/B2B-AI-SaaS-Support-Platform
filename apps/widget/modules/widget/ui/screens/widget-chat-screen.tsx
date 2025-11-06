@@ -1,4 +1,7 @@
 'use client';
+import { DicebearAvatar } from '@workspace/ui/dicebear-avatar';
+import { InfiniteScrollTrigger } from '@workspace/ui/components/infinite-scroll-trigger';
+import { useInfiniteScroll } from '@workspace/ui/hooks/use-infinite-scroll';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -75,6 +78,13 @@ export const WidgetChatScreen = () => {
     { initialNumItems: 10 },
   );
 
+  const { topElementRef, handleLoadMore, canLoadMore, isLoadingMore } =
+    useInfiniteScroll({
+      status: messages.status,
+      loadMore: messages.loadMore,
+      loadSize: 10,
+    });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -115,6 +125,12 @@ export const WidgetChatScreen = () => {
       </WidgetHeader>
       <AIConversation>
         <AIConversationContent>
+          <InfiniteScrollTrigger
+            canLoadMore={canLoadMore}
+            isLoadingMore={isLoadingMore}
+            ref={topElementRef}
+            onLoadMore={handleLoadMore}
+          />
           {toUIMessages(messages.results ?? []).map((message) => {
             return (
               <AIMessage
@@ -125,6 +141,13 @@ export const WidgetChatScreen = () => {
                   <AIResponse>{message.text}</AIResponse>
                 </AIMessageContent>
                 {/*todo: add user avatar component*/}
+                {message.role === 'assistant' && (
+                  <DicebearAvatar
+                    seed="assistant"
+                    imageURL="logoipsum-246.svg"
+                    size={32}
+                  />
+                )}
               </AIMessage>
             );
           })}
@@ -160,13 +183,13 @@ export const WidgetChatScreen = () => {
             )}
           />
           <AIInputToolbar>
-            <AIInputTools>
-
-            </AIInputTools>
+            <AIInputTools></AIInputTools>
             <AIInputSubmit
-              disabled={conversation?.status === 'resolved' || !form.formState.isValid }
-              status='ready'
-              type='submit'
+              disabled={
+                conversation?.status === 'resolved' || !form.formState.isValid
+              }
+              status="ready"
+              type="submit"
             />
           </AIInputToolbar>
         </AIInput>
