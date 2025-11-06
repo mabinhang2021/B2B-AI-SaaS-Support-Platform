@@ -19,7 +19,8 @@ import { platform } from 'os';
 import { time } from 'console';
 import { Doc } from '@workspace/backend/_generated/dataModel';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { contactSessionIdAtomFamily, organizationIdAtom } from '../../atoms/widget-atoms';
+import { contactSessionIdAtomFamily, organizationIdAtom, screenAtom } from '../../atoms/widget-atoms';
+import { set } from 'zod/v4';
 
 
 const formSchema = z.object({
@@ -27,9 +28,10 @@ const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
 });
 
-const organizationId = "demo-organization-id"; // Replace with actual organization ID retrieval logic
+ // Replace with actual organization ID retrieval logic
 
 export const WidgetAuthScreen = () => {
+  const setScreen = useSetAtom(screenAtom);
   const organizationId = useAtomValue(organizationIdAtom);
   const setContactSessionId = useSetAtom(
     contactSessionIdAtomFamily(organizationId || ''),
@@ -72,6 +74,7 @@ export const WidgetAuthScreen = () => {
     })
     
     setContactSessionId(contactSessionId);
+    setScreen('selection');
   };
 
   return (
