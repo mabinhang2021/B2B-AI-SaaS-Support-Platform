@@ -8,6 +8,52 @@ import { components } from '../_generated/api';
 import { paginationOptsValidator, PaginationResult } from 'convex/server';
 import { Doc } from '../_generated/dataModel';
 
+export const getOne = query({
+  args: {
+    conversationId: v.id('conversations'),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new ConvexError({
+        message: 'Unauthorized',
+        code: 'UNAUTHORIZED',
+      });
+    }
+    const orgId = identity.orgId as string;
+    if (!orgId) {
+      throw new ConvexError({
+        message: 'Unauthorized',
+        code: 'UNAUTHORIZED',
+      });
+    }
+    const conversation = await ctx.db.get(args.conversationId);
+    if (!conversation) {
+      throw new ConvexError({
+        message: 'Conversation not found',
+        code: 'not_found',
+      });
+    }
+    if (conversation.organizationId !== orgId) {
+      throw new ConvexError({
+        message: 'Invalid organization',
+        code: 'UNAUTHORIZED',
+      });
+    }
+    const contactSession = await ctx.db.get(conversation.contactSessionId);
+    if (!contactSession) {
+      throw new ConvexError({
+        message: 'Contact session not found',
+        code: 'not_found',
+      });
+    }
+    return{
+      ...conversation,
+      contactSession,
+    }
+  },
+});
+
 export const getMany = query({
   args: {
     status: v.optional(
@@ -56,7 +102,9 @@ export const getMany = query({
       conversations.page.map(async (conversation) => {
         let lastMessage: MessageDoc | null = null;
         const contactSession = await ctx.db.get(conversation.contactSessionId);
-        if(!contactSession){return null}
+        if (!contactSession) {
+          return null;
+        }
         const messages = await supportAgent.listMessages(ctx, {
           threadId: conversation.threadId,
           paginationOpts: { numItems: 1, cursor: null },
@@ -72,11 +120,11 @@ export const getMany = query({
       }),
     );
     const validConversations = conversationsWithAdditionalData.filter(
-      (conv): conv is NonNullable<typeof conv> => conv !== null, 
+      (conv): conv is NonNullable<typeof conv> => conv !== null,
     );
-    return{
+    return {
       ...conversations,
       page: validConversations,
-    }
+    };
   },
 });
