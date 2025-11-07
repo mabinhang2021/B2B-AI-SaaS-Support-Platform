@@ -21,6 +21,15 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         transparent:
           'bg-transparent hover:bg-transparent text-primary-foreground hover:text-primary-foreground/80',
+        //   tertiary:
+        //     'bg-gradient-to-b from-[#3FB62F] to-[#318d25] text-white hover:to-[#318d25]/90 hover:text-white',
+        //   warning:
+        //     'bg-gradient-to-b from-yellow-500 to-[#be8b00] text-white hover:to-[#be8b00]/90',
+        //
+        tertiary:
+          'bg-gradient-to-b from-green-500 to-green-600 text-white hover:to-green-600/90 hover:text-white',
+        warning:
+          'bg-gradient-to-b from-yellow-500 to-amber-700 text-white hover:to-amber-700/90',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
