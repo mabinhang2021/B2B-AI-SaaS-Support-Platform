@@ -49,7 +49,7 @@ export const WidgetAuthScreen = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if(!organizationId) return; 
-    console.log(values);
+
 
     const metadata: Doc<"contactSessions">["metadata"] = {
       userAgent: navigator.userAgent,

@@ -58,6 +58,8 @@
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
+   --tertiary: oklch(0.646 0.172 142.5); /* #3FB62F的OKLCH等效值 */
+  --warning: oklch(0.847 0.199 98.5);   /* #EAB308的OKLCH等效值 */
 }
 
 .dark {
@@ -109,6 +111,8 @@
   --shadow-xl:
     0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+   --tertiary: oklch(0.646 0.172 142.5); /* #3FB62F的OKLCH等效值 */
+  --warning: oklch(0.847 0.199 98.5);   /* #EAB308的OKLCH等效值 */
 }
 
 @theme inline {
@@ -162,6 +166,26 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+}
+
+
+/* 添加按钮样式 */
+.btn-tertiary {
+  background: linear-gradient(to bottom, var(--tertiary), oklch(0.546 0.172 142.5));
+  color: white;
+}
+
+.btn-tertiary:hover {
+  background: linear-gradient(to bottom, var(--tertiary), oklch(0.496 0.172 142.5));
+}
+
+.btn-warning {
+  background: linear-gradient(to bottom, var(--warning), oklch(0.747 0.199 98.5));
+  color: white;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(to bottom, var(--warning), oklch(0.697 0.199 98.5));
 }
 
 @layer base {
