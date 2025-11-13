@@ -31,8 +31,7 @@ export const enhanceResponse = action({
       messages: [
         {
           role: 'system',
-          content:
-            `You are an expert customer support agent. 
+          content: `You are an expert customer support agent. 
             Enhance the operator's message to be more helpful 
             and professional while maintaining their key information.`,
         },
@@ -82,6 +81,10 @@ export const create = mutation({
         message: 'conversation resolved',
         code: 'BAD_REQUEST',
       });
+    }
+
+    if (conversation.status === 'unresolved') {
+      await ctx.db.patch(args.conversationId, { status: 'escalated' });
     }
 
     //todo:implement subscription check here

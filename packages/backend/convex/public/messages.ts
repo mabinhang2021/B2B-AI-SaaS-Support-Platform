@@ -4,7 +4,6 @@ import { ConvexError, v } from 'convex/values';
 import { supportAgent } from '../system/ai/agents/supportAgent';
 import { paginationOptsValidator } from 'convex/server';
 import { escalateConversationTool } from '../system/ai/tools/escalateConversation';
-import { resolve } from 'path';
 import { resolveConversationTool } from '../system/ai/tools/resolveConversation';
 import { saveMessage } from '@convex-dev/agent';
 
@@ -46,11 +45,15 @@ export const create = action({
         code: 'BAD_REQUEST',
       });
     }
-
-    //todo:implement subscription check here
-
     const shouldTriggerAgent = conversation.status === 'unresolved';
+
+    
+
+
+    
+
     if (shouldTriggerAgent) {
+     
       await supportAgent.generateText(
         ctx,
         { threadId: args.threadId },
@@ -68,6 +71,8 @@ export const create = action({
         prompt: args.prompt,
       });
     }
+    
+    
   },
 });
 
@@ -92,3 +97,6 @@ export const getMany = query({
     return paginated;
   },
 });
+
+
+

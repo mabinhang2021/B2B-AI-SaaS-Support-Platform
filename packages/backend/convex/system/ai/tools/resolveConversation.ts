@@ -7,6 +7,7 @@ export const resolveConversationTool = createTool({
   description: 'Resolve a customer support conversation by its thread ID.',
   args: z.object({}),
   handler: async (ctx) => {
+
     if (!ctx.threadId) {
       return 'No thread ID found in context.';
     }
@@ -20,6 +21,7 @@ export const resolveConversationTool = createTool({
             content:"The conversation has been resolved."
         }
     })
+
     return 'Conversation resolved successfully.';
   },
 });

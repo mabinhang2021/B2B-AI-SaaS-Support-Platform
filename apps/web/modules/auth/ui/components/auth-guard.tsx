@@ -7,7 +7,7 @@ import { useAuth } from '@clerk/nextjs';
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const auth = useAuth();
-  console.log('clerk auth status',auth.isLoaded)
+
   return (
     <>
       <AuthLoading>
