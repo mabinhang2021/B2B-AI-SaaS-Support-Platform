@@ -6,6 +6,7 @@ import { paginationOptsValidator } from 'convex/server';
 import { saveMessage } from '@convex-dev/agent';
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import { OPERATOR_MESSAGE_ENHANCEMENT_PROMPT } from '../system/ai/constants';
 
 export const enhanceResponse = action({
   args: {
@@ -31,9 +32,7 @@ export const enhanceResponse = action({
       messages: [
         {
           role: 'system',
-          content: `You are an expert customer support agent. 
-            Enhance the operator's message to be more helpful 
-            and professional while maintaining their key information.`,
+          content: OPERATOR_MESSAGE_ENHANCEMENT_PROMPT
         },
         { role: 'user', content: args.prompt },
       ],

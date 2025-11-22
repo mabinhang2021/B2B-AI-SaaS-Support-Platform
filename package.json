@@ -6,7 +6,9 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "setup:secrets": "node scripts/setup-secret-management.js",
+    "test:secrets": "npx tsx packages/backend/convex/test/testSecrets.ts"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
