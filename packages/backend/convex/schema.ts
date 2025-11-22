@@ -1,3 +1,4 @@
+import { Organization } from '@clerk/backend';
 import { time } from 'console';
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
@@ -5,6 +6,15 @@ import { platform } from 'os';
 import { threadId } from 'worker_threads';
 
 export default defineSchema({
+  plugins: defineTable({
+    OrganizationId: v.string(),
+    service:v.union(v.literal("vapi")),
+    secrets: v.optional(v.any()), // 直接存储敏感数据，替代secretName
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_organization_id', ['OrganizationId'])
+    .index("by_organization_id_and_service", ['OrganizationId','service']),
   conversations: defineTable({
     threadId: v.string(),
     organizationId: v.string(),
@@ -46,4 +56,4 @@ export default defineSchema({
   users: defineTable({
     name: v.string(),
   }),
-});
+  });

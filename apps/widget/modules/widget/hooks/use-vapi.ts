@@ -1,5 +1,5 @@
 import Vapi from '@vapi-ai/web';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface TranscriptMessage {
   role: 'user' | 'assistant';
@@ -12,9 +12,12 @@ export const useVapi = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState<TranscriptMessage[]>([]);
+
   useEffect(() => {
-    // only for test vapi api
-    const vapiInstance = new Vapi('');
+    // 初始化VAPI实例，使用环境变量中的密钥
+    // 在实际使用中，这个密钥应该从Convex获取
+    const apiKey = process.env.NEXT_PUBLIC_VAPI_API_KEY || '';
+    const vapiInstance = new Vapi(apiKey);
     setVapi(vapiInstance);
     vapiInstance.on('call-start', () => {
       setIsConnected(true);
@@ -59,7 +62,7 @@ export const useVapi = () => {
   const startCall = () => {
     setIsConnecting(true);
     if (vapi) {
-      //only for test
+      // 使用默认配置开始通话
       vapi.start('');
     }
   };

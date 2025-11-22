@@ -6,6 +6,7 @@ import { paginationOptsValidator } from 'convex/server';
 import { escalateConversationTool } from '../system/ai/tools/escalateConversation';
 import { resolveConversationTool } from '../system/ai/tools/resolveConversation';
 import { saveMessage } from '@convex-dev/agent';
+import { search } from '../system/ai/tools/search';
 
 export const create = action({
   args: {
@@ -47,13 +48,7 @@ export const create = action({
     }
     const shouldTriggerAgent = conversation.status === 'unresolved';
 
-    
-
-
-    
-
     if (shouldTriggerAgent) {
-     
       await supportAgent.generateText(
         ctx,
         { threadId: args.threadId },
@@ -62,6 +57,7 @@ export const create = action({
           tools: {
             escalateConversationTool,
             resolveConversationTool,
+            searchTool: search,
           },
         },
       );
@@ -71,8 +67,6 @@ export const create = action({
         prompt: args.prompt,
       });
     }
-    
-    
   },
 });
 
@@ -97,6 +91,3 @@ export const getMany = query({
     return paginated;
   },
 });
-
-
-
