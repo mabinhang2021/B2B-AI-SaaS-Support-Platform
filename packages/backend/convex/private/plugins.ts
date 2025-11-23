@@ -23,7 +23,7 @@ export const getOne = query({
     return await ctx.db
       .query('plugins')
       .withIndex('by_organization_id_and_service', (q) =>
-        q.eq('OrganizationId', orgId).eq('service', args.service),
+        q.eq('organizationId', orgId).eq('service', args.service),
       )
       .unique();
   },
@@ -51,7 +51,7 @@ export const remove = mutation({
     const existingPlugin = await ctx.db
       .query('plugins')
       .withIndex('by_organization_id_and_service', (q) =>
-        q.eq('OrganizationId', orgId).eq('service', args.service),
+        q.eq('organizationId', orgId).eq('service', args.service),
       )
       .unique();
     if (!existingPlugin) {
