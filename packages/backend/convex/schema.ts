@@ -7,14 +7,14 @@ import { threadId } from 'worker_threads';
 
 export default defineSchema({
   plugins: defineTable({
-    OrganizationId: v.string(),
+    organizationId: v.string(),
     service:v.union(v.literal("vapi")),
     secrets: v.optional(v.any()), // 直接存储敏感数据，替代secretName
     createdAt: v.number(),
     updatedAt: v.number(),
   })
-    .index('by_organization_id', ['OrganizationId'])
-    .index("by_organization_id_and_service", ['OrganizationId','service']),
+    .index('by_organization_id', ['organizationId'])
+    .index("by_organization_id_and_service", ['organizationId','service']),
   conversations: defineTable({
     threadId: v.string(),
     organizationId: v.string(),

@@ -12,7 +12,7 @@ export const upsert = internalMutation({
     const existingPlugin = await ctx.db
       .query('plugins')
       .withIndex('by_organization_id_and_service', (q) =>
-        q.eq('OrganizationId', args.organizationId).eq('service', args.service),
+        q.eq('organizationId', args.organizationId).eq('service', args.service),
       )
       .unique();
     if (existingPlugin) {
@@ -23,7 +23,7 @@ export const upsert = internalMutation({
       });
     } else {
       await ctx.db.insert('plugins', {
-        OrganizationId: args.organizationId,
+        organizationId: args.organizationId,
         service: args.service,
         secrets: args.secrets,
         createdAt: now,
@@ -43,7 +43,7 @@ export const getByOrganizationIdAndService = internalQuery({
         return await ctx.db
         .query('plugins')
         .withIndex('by_organization_id_and_service', (q) =>
-          q.eq('OrganizationId', args.organizationId).eq('service', args.service),
+          q.eq('organizationId', args.organizationId).eq('service', args.service),
         )
         .unique();
     } 

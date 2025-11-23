@@ -61,7 +61,7 @@ export const PluginCard = ({
               </div>
               <div>
                 <div className="font-medium text-sm">{feature.label}</div>
-                <div className="font-muted-foreground text-sm">
+                <div className="text-muted-foreground text-sm">
                   {feature.description}
                 </div>
               </div>

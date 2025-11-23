@@ -32,7 +32,7 @@ export const get = internalMutation(
       const plugin = await ctx.db
         .query('plugins')
         .withIndex('by_organization_id_and_service', (q) =>
-          q.eq('OrganizationId', args.organizationId).eq('service', args.service),
+          q.eq('organizationId', args.organizationId).eq('service', args.service),
         )
         .unique();
       
