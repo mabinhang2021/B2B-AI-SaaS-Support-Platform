@@ -12,7 +12,7 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
+
   FormMessage,
 } from '@workspace/ui/components/form';
 import { Input } from '@workspace/ui/components/input';
@@ -31,7 +31,7 @@ import { PluginCard, type Feature } from '../components/plugin-card';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '@workspace/backend/_generated/api';
 import { useState } from 'react';
-import { ca } from 'zod/v4/locales';
+
 import { Button } from '@workspace/ui/components/button';
 import { VapiConnectedView } from '../components/vapi-connected-view';
 
@@ -177,8 +177,8 @@ const VapiPluginRemoveForm = ({
       setOpen(false);
       toast.success('Vapi plugin removed successfully');
     } catch (error) {
-      console.error('Failed to connect Vapi plugin:', error);
-      toast.error('Failed to connect Vapi plugin');
+      console.error('Failed to remove Vapi plugin:', error);
+      toast.error('Failed to remove Vapi plugin');
     }
   };
   return (
