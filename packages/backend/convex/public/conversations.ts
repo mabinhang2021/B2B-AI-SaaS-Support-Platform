@@ -104,6 +104,13 @@ export const create = mutation({
       });
     }
 
+    const widgetSettings = await ctx.db
+      .query("widgetSettings")
+      .withIndex("by_organization_id", (q) =>
+        q.eq("organizationId", args.organizationId)
+      )
+      .unique();
+
     const { threadId } = await supportAgent.createThread(ctx, {
       userId: args.organizationId,
     });
@@ -112,7 +119,7 @@ export const create = mutation({
       threadId,
       message: {
         role: 'assistant',
-        content: 'Hello! How can we assist you today?',
+        content: widgetSettings?.greetMessage  ||'Hello! How can we assist you today?',
       },
     });
 

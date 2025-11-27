@@ -1,5 +1,7 @@
 import Vapi from '@vapi-ai/web';
+import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
+import { vapiSecretsAtom, widgetSettingsAtom } from '../atoms/widget-atoms';
 
 interface TranscriptMessage {
   role: 'user' | 'assistant';
@@ -7,6 +9,8 @@ interface TranscriptMessage {
 }
 
 export const useVapi = () => {
+  const vapiSecrets = useAtomValue(vapiSecretsAtom);
+  const widgetSettings = useAtomValue(widgetSettingsAtom);
   const [vapi, setVapi] = useState<Vapi | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -14,10 +18,13 @@ export const useVapi = () => {
   const [transcript, setTranscript] = useState<TranscriptMessage[]>([]);
 
   useEffect(() => {
+    if (!vapiSecrets) {
+      return;
+    }
+    const vapiInstance = new Vapi(vapiSecrets.publicApiKey);
     // 初始化VAPI实例，使用环境变量中的密钥
     // 在实际使用中，这个密钥应该从Convex获取
     const apiKey = process.env.NEXT_PUBLIC_VAPI_API_KEY || '';
-    const vapiInstance = new Vapi(apiKey);
     setVapi(vapiInstance);
     vapiInstance.on('call-start', () => {
       setIsConnected(true);
@@ -60,10 +67,12 @@ export const useVapi = () => {
   }, []);
 
   const startCall = () => {
+    if (!vapiSecrets || !widgetSettings?.vapiSettings?.assistantId) {
+      return;
+    }
     setIsConnecting(true);
     if (vapi) {
-      // 使用默认配置开始通话
-      vapi.start('');
+      vapi.start(widgetSettings.vapiSettings.assistantId);
     }
   };
   const endCall = () => {
