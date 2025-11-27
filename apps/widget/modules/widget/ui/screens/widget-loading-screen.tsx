@@ -82,7 +82,7 @@ export const WidgetLoadingScreen = ({
     setLoadingMessage('finding contact session id...');
     if (!contactSessionId) {
       setSessionValid(false);
-      setStep('done');
+      setStep('settings');
       return;
     }
     setLoadingMessage('validating session...');
@@ -129,10 +129,8 @@ export const WidgetLoadingScreen = ({
     setLoadingMessage('loading vapi secrets...');
     getVapiSecrets({ organizationId })
       .then((secrets) => {
-        if (secrets) {
-          setVapiSecrets(secrets);
-          setStep('done');
-        }
+        setVapiSecrets(secrets);
+        setStep('done');
       })
       .catch(() => {
         setVapiSecrets(null);

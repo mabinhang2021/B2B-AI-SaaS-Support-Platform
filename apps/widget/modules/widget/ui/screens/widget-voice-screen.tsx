@@ -34,7 +34,12 @@ export const WidgetVoiceScreen = () => {
           <Button
             size="icon"
             variant="transparent"
-            onClick={() => setScreen('selection')}
+            onClick={() => {
+              if (isConnected) {
+                endCall();
+              }
+              setScreen('selection');
+            }}
           >
             <ArrowLeftIcon />
           </Button>
@@ -45,14 +50,15 @@ export const WidgetVoiceScreen = () => {
         <AIConversation className="h-full ">
           <AIConversationContent>
             {transcript.map((message, index) => (
-              <AIMessage 
-              key={`${message.role}-${index}-${message.text}`} 
-              from={message.role}>
+              <AIMessage
+                key={`${message.role}-${index}-${message.text}`}
+                from={message.role}
+              >
                 <AIMessageContent>{message.text}</AIMessageContent>
               </AIMessage>
             ))}
           </AIConversationContent>
-          <AIConversationScrollButton/>
+          <AIConversationScrollButton />
         </AIConversation>
       ) : (
         <div className="flex flex-1 h-full flex-col items-center justify-center gap-y-4 ">

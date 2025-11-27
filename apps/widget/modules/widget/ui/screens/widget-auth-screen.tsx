@@ -13,10 +13,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from 'convex/react';
 import {api} from "@workspace/backend/_generated/api";
-import { userAgent } from 'next/server';
-import { Languages } from 'lucide-react';
-import { platform } from 'os';
-import { time } from 'console';
+
 import { Doc } from '@workspace/backend/_generated/dataModel';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { contactSessionIdAtomFamily, organizationIdAtom, screenAtom } from '../../atoms/widget-atoms';

@@ -64,7 +64,7 @@ export default defineSchema({
       }),
     ),
   })
-    .index('by_organization', ['organizationId'])
+    .index('by_organization_id', ['organizationId'])
     .index('by_expires_at', ['expiresAt']),
   users: defineTable({
     name: v.string(),

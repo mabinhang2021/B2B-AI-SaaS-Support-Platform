@@ -67,12 +67,17 @@ export const WidgetContactScreen = () => {
         <p className="font-bold text-2xl">{phoneNumber}</p>
       </div>
       <div className="flex flex-col items-center gap-y-2">
-        <Button onClick={handleCopy} disabled={!phoneNumber}
-          className='w-full' size="lg" variant="outline">
+        <Button
+          onClick={handleCopy}
+          disabled={!phoneNumber}
+          className="w-full"
+          size="lg"
+          variant="outline"
+        >
           {copied ? (
             <>
               <CheckIcon className="mr-2 size-4" />
-              'Copied!'
+              Copied!
             </>
           ) : (
             <>
@@ -81,9 +86,9 @@ export const WidgetContactScreen = () => {
             </>
           )}
         </Button>
-        <Button asChild className='w-full' size="lg">
+        <Button asChild className="w-full" size="lg">
           <Link href={`tel:${phoneNumber}`}>
-            <PhoneIcon/>
+            <PhoneIcon />
             Call Us
           </Link>
         </Button>
