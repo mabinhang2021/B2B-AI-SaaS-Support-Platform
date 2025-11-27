@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { WidgetScreen } from '../types';
 import { atomFamily, atomWithStorage } from 'jotai/utils';
-import { Id } from '@workspace/backend/_generated/dataModel';
+import { Doc, Id } from '@workspace/backend/_generated/dataModel';
 
 //basic widget state atoms
 
@@ -10,11 +10,18 @@ export const organizationIdAtom = atom<string | null>(null);
 
 //organization-scoped contact session atom
 export const contactSessionIdAtomFamily = atomFamily((organizationId: string) =>
-  atomWithStorage<Id<"contactSessions"> | null>('${CONTACT_SESSION_KEY}_${organizationId}', null),
+  atomWithStorage<Id<'contactSessions'> | null>(
+    '${CONTACT_SESSION_KEY}_${organizationId}',
+    null,
+  ),
 );
- 
+
 export const errorMessageAtom = atom<string | null>(null);
 export const loadingMessageAtom = atom<string | null>(null);
+export const conversationIdAtom = atom<Id<'conversations'> | null>(null);
 
+export const widgetSettingsAtom = atom<Doc<'widgetSettings'> | null>(null);
+export const vapiSecretsAtom = atom<{ publicApiKey: string } | null>(null);
 
-export const conversationIdAtom = atom<Id<"conversations"> | null>(null);
+export const hasVapiSecretsAtom = atom((get) => get(vapiSecretsAtom) !== null);
+ 

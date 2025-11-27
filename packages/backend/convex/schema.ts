@@ -1,9 +1,8 @@
-import { Organization } from '@clerk/backend';
-import { time } from 'console';
+
+
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
-import { platform } from 'os';
-import { threadId } from 'worker_threads';
+
 
 export default defineSchema({
   widgetSettings: defineTable({

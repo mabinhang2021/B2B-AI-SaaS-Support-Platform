@@ -1,24 +1,21 @@
 'use client';
 
 import { useAtomValue, useSetAtom } from 'jotai';
-import {
-  AlertTriangleIcon,
-  MessageSquareIcon,
-  MessageSquareTextIcon,
-} from 'lucide-react';
+import { MessageSquareTextIcon, MicIcon, PhoneIcon } from 'lucide-react';
 import { WidgetHeader } from '../components/widget-header';
 import {
   contactSessionIdAtomFamily,
   conversationIdAtom,
   errorMessageAtom,
+  hasVapiSecretsAtom,
   organizationIdAtom,
   screenAtom,
+  widgetSettingsAtom,
 } from '../../atoms/widget-atoms';
 import { Button } from '@workspace/ui/components/button';
 import { useMutation } from 'convex/react';
 import { api } from '@workspace/backend/_generated/api';
 import { useState } from 'react';
-import { set } from 'zod/v4-mini';
 import { WidgetFooter } from '../components/widget-footer';
 
 export const WidgetSelectionScreen = () => {
@@ -27,6 +24,8 @@ export const WidgetSelectionScreen = () => {
   const contactSessionId = useAtomValue(
     contactSessionIdAtomFamily(organizationId || ''),
   );
+  const widgetSettings = useAtomValue(widgetSettingsAtom);
+  const hasVapiSecrets = useAtomValue(hasVapiSecretsAtom);
   const setErrorMessage = useSetAtom(errorMessageAtom);
   const createConversation = useMutation(api.public.conversations.create);
   const setConversationId = useSetAtom(conversationIdAtom);
@@ -78,6 +77,32 @@ export const WidgetSelectionScreen = () => {
             <span>Start chat</span>
           </div>
         </Button>
+        {hasVapiSecrets && widgetSettings?.vapiSettings?.assistantId && (
+          <Button
+            className="h-16 w-full justify-between"
+            variant="outline"
+            onClick={()=>setScreen("voice")}
+            disabled={isPending}
+          >
+            <div className="flex items-center gap-x-2">
+              <MicIcon className="size-4" />
+              <span>Start voice call with vapi</span>
+            </div>
+          </Button>
+        )}
+        {hasVapiSecrets && widgetSettings?.vapiSettings?.phoneNumber && (
+          <Button
+            className="h-16 w-full justify-between"
+            variant="outline"
+            onClick={()=>setScreen("contact")}
+            disabled={isPending}
+          >
+            <div className="flex items-center gap-x-2">
+              <PhoneIcon className="size-4" />
+              <span>Call us</span>
+            </div>
+          </Button>
+        )}
       </div>
       <WidgetFooter />
     </>

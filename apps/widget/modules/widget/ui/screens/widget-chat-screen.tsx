@@ -14,11 +14,11 @@ import {
   errorMessageAtom,
   organizationIdAtom,
   screenAtom,
+  widgetSettingsAtom,
 } from '../../atoms/widget-atoms';
 import { Button } from '@workspace/ui/components/button';
 import { useAction, useQuery } from 'convex/react';
 import { api } from '@workspace/backend/_generated/api';
-import { json } from 'stream/consumers';
 import {
   AIInput,
   AIInputSubmit,
@@ -42,6 +42,8 @@ import {
 } from '@workspace/ui/components/ai/suggestion';
 import { useThreadMessages, toUIMessages } from '@convex-dev/agent/react';
 import { Form, FormField } from '@workspace/ui/components/form';
+import { useMemo } from 'react';
+import { tr } from 'zod/v4/locales';
 
 const formSchema = z.object({
   message: z.string().min(1, 'Message is required'),
@@ -50,12 +52,21 @@ const formSchema = z.object({
 export const WidgetChatScreen = () => {
   const setScreen = useSetAtom(screenAtom);
   const setConversationId = useSetAtom(conversationIdAtom);
-
+  const widgetSettings = useAtomValue(widgetSettingsAtom);
   const conversationId = useAtomValue(conversationIdAtom);
   const organizationId = useAtomValue(organizationIdAtom);
   const contactSessionId = useAtomValue(
     contactSessionIdAtomFamily(organizationId || ''),
   );
+
+  const suggestions = useMemo(() => {
+    if (!widgetSettings) return [];
+    return Object.keys(widgetSettings.defaultSuggestions).map((key) => {
+      return widgetSettings.defaultSuggestions[
+        key as keyof typeof widgetSettings.defaultSuggestions
+      ];
+    });
+  }, [widgetSettings]);
 
   const conversation = useQuery(
     api.public.conversations.getOne,
@@ -153,7 +164,28 @@ export const WidgetChatScreen = () => {
           })}
         </AIConversationContent>
       </AIConversation>
-      {/*todo: add suggestions*/}
+
+      {toUIMessages(messages.results ?? [])?.length === 1 && (
+        <AISuggestions className="flex w-full flex-col items-end p-2">
+          {suggestions.map((suggestion) => {
+            if (!suggestion) return null;
+            return (
+              <AISuggestion
+                key={suggestion}
+                onClick={() => {
+                  form.setValue('message', suggestion, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                    shouldValidate: true,
+                  });
+                  form.handleSubmit(onSubmit)();
+                }}
+                suggestion={suggestion}
+              />
+            );
+          })}
+        </AISuggestions>
+      )}
       <Form {...form}>
         <AIInput
           onSubmit={form.handleSubmit(onSubmit)}
