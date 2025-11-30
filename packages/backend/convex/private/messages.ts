@@ -27,6 +27,19 @@ export const enhanceResponse = action({
         code: 'UNAUTHORIZED',
       });
     }
+
+    const subscription = await ctx.runQuery(
+      internal.system.subscriptions.getByOrganizationId,{
+        organizationId:orgId
+      }
+    )
+    if(subscription?.status !== "active"){
+        throw new ConvexError({
+          code:"BAD_REQUEST",
+          message:"Not subscribe"
+        })
+    }
+
     const response = await generateText({
       model: openai('chatgpt-4o-latest'),
       messages: [
