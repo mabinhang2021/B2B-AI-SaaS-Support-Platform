@@ -12,7 +12,7 @@ const Page = () => {
       }
       condition={(has) => has({ plan: 'pro' })}
     >
-      ;
+      
       <CustomizationView />
     </Protect>
   );
