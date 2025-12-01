@@ -1,0 +1,17 @@
+{
+  "name": "embed",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@types/node": "20.19.9",
+    "eslint": "9.37.0",
+    "typescript": "^5.9.2",
+    "@workspace/eslint-config": "workspace:^",
+    
+    "vite": "^7.2.4"
+  }
+}
