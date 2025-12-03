@@ -19,21 +19,24 @@ import { useState } from 'react';
 import { createScript } from '../../utils';
 
 export const IntegrationsView = () => {
-
-    const [DialogOpen, setIsDialogOpen] = useState(false); 
-    const [selectedSnippet, setSelectedSnippet] = useState('');
+  const [DialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedSnippet, setSelectedSnippet] = useState('');
   const { organization } = useOrganization();
 
   const handleIntegrationClick = (integrationId: IntegrationId) => {
     if (!organization) return;
-     const snippet = createScript(organization.id, integrationId);
-     setSelectedSnippet(snippet);
-     setIsDialogOpen(true);
-  }
+    const snippet = createScript(organization.id, integrationId);
+    setSelectedSnippet(snippet);
+    setIsDialogOpen(true);
+  };
 
   const handleCopy = async () => {
+    if (!organization) {
+      toast.error('No organization selected');
+      return;
+    }
     try {
-      await navigator.clipboard.writeText(organization?.id || '');
+      await navigator.clipboard.writeText(organization.id);
       toast.success('Organization ID copied to clipboard');
     } catch {
       toast.error('Failed to copy Organization ID');
@@ -42,11 +45,11 @@ export const IntegrationsView = () => {
 
   return (
     <>
-        <IntegrationsDialog
-            open ={DialogOpen}
-            onOpenChange={setIsDialogOpen}
-            snippet={selectedSnippet}
-        />
+      <IntegrationsDialog
+        open={DialogOpen}
+        onOpenChange={setIsDialogOpen}
+        snippet={selectedSnippet}
+      />
       <div className="flex min-h-screen flex-col bg-muted p-8">
         <div className="mx-auto w-full max-w-screen-md">
           <div className="space-y-2">
@@ -57,8 +60,8 @@ export const IntegrationsView = () => {
           </div>
           <div className="mt-8 space-y-6">
             <div className="flex items-center gap-4">
-              <Label className="w-34" htmlFor="website-id">
-                OrganIzation Id
+              <Label className="w-34" htmlFor="organization-id">
+                OrganIzation ID
               </Label>
               <Input
                 disabled
@@ -118,9 +121,9 @@ export const IntegrationsDialog = ({
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(snippet);
-      toast.success('Organization ID copied to clipboard');
+      toast.success('Code snippet copied to clipboard');
     } catch {
-      toast.error('Failed to copy Organization ID');
+      toast.error('Failed to copy code snippet');
     }
   };
   return (
@@ -158,10 +161,10 @@ export const IntegrationsDialog = ({
           </div>
           <div className="space-y-2">
             <div className="rounded-md bg-accent p-2 text-sm">
-              2.Add the code in your page
+              2.Add the code to your page
             </div>
             <p className="text-muted-foreground text-sm ">
-              Paste the chat box code above in your page.
+               Paste the chat box code above into your page.
             </p>
           </div>
         </div>
