@@ -34,7 +34,7 @@ const features: Feature[] = [
     icon: BotIcon,
     label: 'AI Customer Support',
     description:
-      'Provide instant and accurate responses to customer 24/7 ',
+      'Provide instant and accurate responses to customers 24/7',
   },
   {
     icon: MicIcon,
